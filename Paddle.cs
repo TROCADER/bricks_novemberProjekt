@@ -17,10 +17,11 @@ namespace bricks_novemberProjekt
         public KeyboardKey leftKey;
         public KeyboardKey rightKey;
 
-        public Paddle(float xPos, float yPos, KeyboardKey upKey, KeyboardKey downKey)
+        public Paddle(KeyboardKey upKey, KeyboardKey downKey)
         {
-            this.xPos = xPos;
-            this.yPos = yPos;
+            this.xPos = Raylib.GetScreenWidth()/2-(xRec/2);
+            System.Console.WriteLine();
+            this.yPos = Raylib.GetScreenHeight()-30;
             this.leftKey = upKey;
             this.rightKey = downKey;
         }

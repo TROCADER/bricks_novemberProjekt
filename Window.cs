@@ -5,9 +5,9 @@ namespace bricks_novemberProjekt
 {
     public class Window
     {
-        // Ställer in storleken av fönstret
-        private int xWindowSize = 1280;
-        private int yWindowSize = 960;
+        // Ställer in storleken av fönstret ()
+        private int xWindowSize = 960;
+        private int yWindowSize = 720;
 
         // Ställer in hastigheten av paddlen och bollen
         private float paddleSpeed = 10f;
@@ -15,7 +15,7 @@ namespace bricks_novemberProjekt
 
         public Window()
         {
-            Paddle paddle = new Paddle(xWindowSize/2, yWindowSize-30, KeyboardKey.KEY_LEFT, KeyboardKey.KEY_RIGHT);
+            Paddle paddle = new Paddle(KeyboardKey.KEY_LEFT, KeyboardKey.KEY_RIGHT);
             Ball ball = new Ball();
 
             // Initierar fönstret samt begränsar FPS'en till 60 på grund av varierande FPS
@@ -57,6 +57,7 @@ namespace bricks_novemberProjekt
                 Raylib.ClearBackground(Color.BLACK);
 
                 paddle.Draw();
+                ball.Draw();
 
                 Raylib.EndDrawing();
             }
