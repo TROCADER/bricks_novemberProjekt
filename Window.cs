@@ -15,14 +15,14 @@ namespace bricks_novemberProjekt
 
         public Window()
         {
-            Paddle paddle = new Paddle(KeyboardKey.KEY_LEFT, KeyboardKey.KEY_RIGHT);
-            Ball ball = new Ball();
-
             // Initierar fönstret samt begränsar FPS'en till 60 på grund av varierande FPS
             // --> programmet körs snabbare eller långsammare beroende på datorn kapabilitet
             // --> kan leda till en försämrad spelupplevelse, samt svårare att koda efter
             Raylib.InitWindow(xWindowSize, yWindowSize, "Bricks");
             Raylib.SetTargetFPS(60);
+            
+            Paddle paddle = new Paddle(KeyboardKey.KEY_LEFT, KeyboardKey.KEY_RIGHT);
+            Ball ball = new Ball();
 
             // Så länge fönstret är öppet så kommer programmet att loopas varje ny bild/frame
             while (!Raylib.WindowShouldClose())
