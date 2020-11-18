@@ -17,6 +17,8 @@ namespace bricks_novemberProjekt
         public KeyboardKey leftKey;
         public KeyboardKey rightKey;
 
+        // Ställer in paddels position
+        // Hämtar in hur stor skärmen är och därefter positionerar enligt den informationen
         public Paddle(KeyboardKey upKey, KeyboardKey downKey)
         {
             this.xPos = Raylib.GetScreenWidth()/2-(xRec/2);

@@ -20,9 +20,11 @@ namespace bricks_novemberProjekt
             // --> kan leda till en försämrad spelupplevelse, samt svårare att koda efter
             Raylib.InitWindow(xWindowSize, yWindowSize, "Bricks");
             Raylib.SetTargetFPS(60);
-            
+
             Paddle paddle = new Paddle(KeyboardKey.KEY_LEFT, KeyboardKey.KEY_RIGHT);
             Ball ball = new Ball();
+
+            Brick brick1 = new Brick(20, 20);
 
             // Så länge fönstret är öppet så kommer programmet att loopas varje ny bild/frame
             while (!Raylib.WindowShouldClose())
@@ -58,14 +60,10 @@ namespace bricks_novemberProjekt
 
                 paddle.Draw();
                 ball.Draw();
+                brick1.Draw();
 
                 Raylib.EndDrawing();
             }
-        }
-
-        private void CheckPaddlePos()
-        {
-            
         }
     }
 }
