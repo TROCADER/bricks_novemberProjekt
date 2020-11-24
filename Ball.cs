@@ -5,25 +5,39 @@ namespace bricks_novemberProjekt
 {
     public class Ball
     {
-        // Ställer in storleken på bollen eftersom att dn är en kvadrat (normalt sett)
-        // Har använt 2 variabler istället för 1 eftersom att (om man vill) så ska man kunna spela med en rektangulär boll (inte en boll vid det laget)
-        private int xRec = 25;
-        private int yRec = 25;
+        // Ställer in hastigheten på bollen
+        private float xMov = 5f;
+        private float yMov = 5f;
 
-        private float xPos = 0;
-        private float yPos = 0;
+        //Ändrade om till en Raylib Rectangle då det visade sig vara mer praktiskt
+        public Rectangle rectangle = new Rectangle(Raylib.GetScreenWidth()/2-(25/2), Raylib.GetScreenHeight()/2-(25/2), 25, 25);
 
         // Ställer in paddels position
         // Hämtar in hur stor skärmen är och därefter positionerar enligt den informationen
         public Ball()
         {
-            this.xPos = Raylib.GetScreenWidth()/2-(xRec/2);
-            this.yPos = Raylib.GetScreenHeight()/2-(yRec/2);
+            
         }
 
         public void Draw()
         {
-            Raylib.DrawRectangle((int)xPos, (int)yPos, xRec, yRec, Color.WHITE);
+            Raylib.DrawRectangleRec(rectangle, Color.WHITE);
+        }
+
+        public void UpdatePos()
+        {
+            rectangle.x += xMov;
+            rectangle.y += yMov;
+
+            if (rectangle.x > Raylib.GetScreenWidth()-rectangle.width || rectangle.x < 0)
+            {
+                xMov = -xMov;
+            }
+
+            if (rectangle.y > Raylib.GetScreenHeight()-rectangle.height || rectangle.y < 0)
+            {
+                yMov = -yMov;
+            }
         }
     }
 }

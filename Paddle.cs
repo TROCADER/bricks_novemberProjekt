@@ -17,13 +17,12 @@ namespace bricks_novemberProjekt
         public KeyboardKey leftKey;
         public KeyboardKey rightKey;
 
+        public Rectangle rectangle = new Rectangle(Raylib.GetScreenHeight()/2+(150/2), Raylib.GetScreenHeight()-30, 150, 20);
+
         // Ställer in paddels position
         // Hämtar in hur stor skärmen är och därefter positionerar enligt den informationen
         public Paddle(KeyboardKey upKey, KeyboardKey downKey)
         {
-            this.xPos = Raylib.GetScreenWidth()/2-(xRec/2);
-            System.Console.WriteLine();
-            this.yPos = Raylib.GetScreenHeight()-30;
             this.leftKey = upKey;
             this.rightKey = downKey;
         }
@@ -31,7 +30,7 @@ namespace bricks_novemberProjekt
         // Enkel metod för att rita ut paddlen
         public void Draw()
         {
-            Raylib.DrawRectangle((int)xPos, (int)yPos, xRec, yRec, Color.WHITE);
+            Raylib.DrawRectangleRec(rectangle, Color.WHITE);
         }
     }
 }
