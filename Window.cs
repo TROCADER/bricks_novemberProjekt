@@ -24,57 +24,50 @@ namespace bricks_novemberProjekt
             Ball ball = new Ball();
 
             // Initierar alla tegelstenar
-            // Temp-kod, planerar att byta ut till bättre kod
-            Brick brick1_1 = new Brick(20, 20);
-            Brick brick1_2 = new Brick(120+20, 20);
-            Brick brick1_3 = new Brick(240+20, 20);
-            Brick brick1_4 = new Brick(360+20, 20);
-            Brick brick1_5 = new Brick(480+20, 20);
-            Brick brick1_6 = new Brick(600+20, 20);
-            Brick brick1_7 = new Brick(720+20, 20);
-            Brick brick1_8 = new Brick(840+20, 20);
+            // Hittade hur man gör för att initiera genom en loop, men efter tester så kunde jag enbart göra 1 loop, crash på andra loopen
+            // https://stackoverflow.com/questions/29653186/c-sharp-instantiate-multiple-objects
+            
+            // Positionering av all bricks/tegelstenar
+            // (120*i)+20, 20
+            // (120*i)+20, 70
+            // (120*i)+20, 120
+            // (120*i)+20, 170
+            // (120*i)+20, 220
 
-            Brick brick2_1 = new Brick(20, 70);
-            Brick brick2_2 = new Brick(120+20, 70);
-            Brick brick2_3 = new Brick(240+20, 70);
-            Brick brick2_4 = new Brick(360+20, 70);
-            Brick brick2_5 = new Brick(480+20, 70);
-            Brick brick2_6 = new Brick(600+20, 70);
-            Brick brick2_7 = new Brick(720+20, 70);
-            Brick brick2_8 = new Brick(840+20, 70);
+            Brick[] bricks = new Brick[8];
+            for (int i = 0; i < bricks.Length; i++)
+            {
+                bricks[i] = new Brick((120*i)+20, 20);
+            }
 
-            Brick brick3_1 = new Brick(20, 120);
-            Brick brick3_2 = new Brick(120+20, 120);
-            Brick brick3_3 = new Brick(240+20, 120);
-            Brick brick3_4 = new Brick(360+20, 120);
-            Brick brick3_5 = new Brick(480+20, 120);
-            Brick brick3_6 = new Brick(600+20, 120);
-            Brick brick3_7 = new Brick(720+20, 120);
-            Brick brick3_8 = new Brick(840+20, 120);
+            Brick[] bricks2 = new Brick[8];
+            for (int i = 0; i < bricks2.Length; i++)
+            {
+                bricks2[i] = new Brick((120*i)+20, 70);
+            }
 
-            Brick brick4_1 = new Brick(20, 170);
-            Brick brick4_2 = new Brick(120+20, 170);
-            Brick brick4_3 = new Brick(240+20, 170);
-            Brick brick4_4 = new Brick(360+20, 170);
-            Brick brick4_5 = new Brick(480+20, 170);
-            Brick brick4_6 = new Brick(600+20, 170);
-            Brick brick4_7 = new Brick(720+20, 170);
-            Brick brick4_8 = new Brick(840+20, 170);
+            Brick[] bricks3 = new Brick[8];
+            for (int i = 0; i < bricks3.Length; i++)
+            {
+                bricks3[i] = new Brick((120*i)+20, 120);
+            }
 
-            Brick brick5_1 = new Brick(20, 220);
-            Brick brick5_2 = new Brick(120+20, 220);
-            Brick brick5_3 = new Brick(240+20, 220);
-            Brick brick5_4 = new Brick(360+20, 220);
-            Brick brick5_5 = new Brick(480+20, 220);
-            Brick brick5_6 = new Brick(600+20, 220);
-            Brick brick5_7 = new Brick(720+20, 220);
-            Brick brick5_8 = new Brick(840+20, 220);
+            Brick[] bricks4 = new Brick[8];
+            for (int i = 0; i < bricks4.Length; i++)
+            {
+                bricks4[i] = new Brick((120*i)+20, 170);
+            }
 
+            Brick[] bricks5 = new Brick[8];
+            for (int i = 0; i < bricks5.Length; i++)
+            {
+                bricks5[i] = new Brick((120*i)+20, 220);
+            }
 
             // Så länge fönstret är öppet så kommer programmet att loopas varje ny bild/frame
             while (!Raylib.WindowShouldClose())
             {
-                ball.UpdatePos();
+                ball.Update();
                 // Styrning av paddlen
                 // Ändrar x postion i paddelns klass
                 if (Raylib.IsKeyDown(paddle.leftKey))
@@ -89,7 +82,7 @@ namespace bricks_novemberProjekt
                 
                 // Begränsar så att paddeln inte kan åka utanför bilden
                 // Kanske byter ut så att paddlen istället teleporterar till motsatta sidan
-                if (paddle.rectangle.x == 0+20)
+                if (paddle.rectangle.x <= 10)
                 {
                     paddle.rectangle.x += paddleSpeed;
                 }
@@ -108,51 +101,17 @@ namespace bricks_novemberProjekt
                 paddle.Draw();
                 ball.Draw();
 
-                // Temp-kod, planerar att byta ut till bättre kod
-                brick1_1.Draw();
-                brick1_2.Draw();
-                brick1_3.Draw();
-                brick1_4.Draw();
-                brick1_5.Draw();
-                brick1_6.Draw();
-                brick1_7.Draw();
-                brick1_8.Draw();
-
-                brick2_1.Draw();
-                brick2_2.Draw();
-                brick2_3.Draw();
-                brick2_4.Draw();
-                brick2_5.Draw();
-                brick2_6.Draw();
-                brick2_7.Draw();
-                brick2_8.Draw();
-
-                brick3_1.Draw();
-                brick3_2.Draw();
-                brick3_3.Draw();
-                brick3_4.Draw();
-                brick3_5.Draw();
-                brick3_6.Draw();
-                brick3_7.Draw();
-                brick3_8.Draw();
-
-                brick4_1.Draw();
-                brick4_2.Draw();
-                brick4_3.Draw();
-                brick4_4.Draw();
-                brick4_5.Draw();
-                brick4_6.Draw();
-                brick4_7.Draw();
-                brick4_8.Draw();
-
-                brick5_1.Draw();
-                brick5_2.Draw();
-                brick5_3.Draw();
-                brick5_4.Draw();
-                brick5_5.Draw();
-                brick5_6.Draw();
-                brick5_7.Draw();
-                brick5_8.Draw();
+                // Ritar ut alla bricks/tegelstenar
+                // Eftersom att alla arrayer med bricks/tegelstenar har samma antal funkar det att ha alla i samma loop
+                // Annars skulle jag vara tvungen att ha fler loopar
+                for (int i = 0; i < bricks.Length; i++)
+                {
+                    bricks[i].Draw();
+                    bricks2[i].Draw();
+                    bricks3[i].Draw();
+                    bricks4[i].Draw();
+                    bricks5[i].Draw();
+                }
 
                 Raylib.EndDrawing();
             }

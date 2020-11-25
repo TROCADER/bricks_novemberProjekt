@@ -17,6 +17,7 @@ namespace bricks_novemberProjekt
         public KeyboardKey leftKey;
         public KeyboardKey rightKey;
 
+        // Initierar en rektangel med mått baserade på skärmens mått
         public Rectangle rectangle = new Rectangle(Raylib.GetScreenHeight()/2+(150/2), Raylib.GetScreenHeight()-30, 150, 20);
 
         // Ställer in paddels position

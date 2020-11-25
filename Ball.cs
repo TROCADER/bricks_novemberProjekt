@@ -12,19 +12,15 @@ namespace bricks_novemberProjekt
         //Ändrade om till en Raylib Rectangle då det visade sig vara mer praktiskt
         public Rectangle rectangle = new Rectangle(Raylib.GetScreenWidth()/2-(25/2), Raylib.GetScreenHeight()/2-(25/2), 25, 25);
 
-        // Ställer in paddels position
-        // Hämtar in hur stor skärmen är och därefter positionerar enligt den informationen
-        public Ball()
-        {
-            
-        }
+        // Initierar paddlen för kollision
+        Paddle paddle = new Paddle(KeyboardKey.KEY_LEFT, KeyboardKey.KEY_RIGHT);
 
         public void Draw()
         {
             Raylib.DrawRectangleRec(rectangle, Color.WHITE);
         }
 
-        public void UpdatePos()
+        public void Update()
         {
             rectangle.x += xMov;
             rectangle.y += yMov;
@@ -37,6 +33,11 @@ namespace bricks_novemberProjekt
             if (rectangle.y > Raylib.GetScreenHeight()-rectangle.height || rectangle.y < 0)
             {
                 yMov = -yMov;
+            }
+            
+            if (Raylib.CheckCollisionRecs(rectangle, paddle.rectangle))
+            {
+                xMov = -xMov;
             }
         }
     }
