@@ -35,6 +35,7 @@ namespace bricks_novemberProjekt
                 yMov = -yMov;
             }
             
+            // Kollision som inte funkar
             if (Raylib.CheckCollisionRecs(rectangle, paddle.rectangle))
             {
                 xMov = -xMov;

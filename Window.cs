@@ -26,41 +26,19 @@ namespace bricks_novemberProjekt
             // Initierar alla tegelstenar
             // Hittade hur man gör för att initiera genom en loop, men efter tester så kunde jag enbart göra 1 loop, crash på andra loopen
             // https://stackoverflow.com/questions/29653186/c-sharp-instantiate-multiple-objects
-            
-            // Positionering av all bricks/tegelstenar
-            // (120*i)+20, 20
-            // (120*i)+20, 70
-            // (120*i)+20, 120
-            // (120*i)+20, 170
-            // (120*i)+20, 220
 
             Brick[] bricks = new Brick[8];
+            Brick[] bricks2 = new Brick[8];
+            Brick[] bricks3 = new Brick[8];
+            Brick[] bricks4 = new Brick[8];
+            Brick[] bricks5 = new Brick[8];
+
             for (int i = 0; i < bricks.Length; i++)
             {
                 bricks[i] = new Brick((120*i)+20, 20);
-            }
-
-            Brick[] bricks2 = new Brick[8];
-            for (int i = 0; i < bricks2.Length; i++)
-            {
                 bricks2[i] = new Brick((120*i)+20, 70);
-            }
-
-            Brick[] bricks3 = new Brick[8];
-            for (int i = 0; i < bricks3.Length; i++)
-            {
                 bricks3[i] = new Brick((120*i)+20, 120);
-            }
-
-            Brick[] bricks4 = new Brick[8];
-            for (int i = 0; i < bricks4.Length; i++)
-            {
                 bricks4[i] = new Brick((120*i)+20, 170);
-            }
-
-            Brick[] bricks5 = new Brick[8];
-            for (int i = 0; i < bricks5.Length; i++)
-            {
                 bricks5[i] = new Brick((120*i)+20, 220);
             }
 
