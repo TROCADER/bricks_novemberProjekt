@@ -1,3 +1,5 @@
+using System.Numerics;
+using System.Collections.Generic;
 using System;
 using Raylib_cs;
 
@@ -12,6 +14,9 @@ namespace bricks_novemberProjekt
         // Ställer in hastigheten av paddlen och bollen
         private float paddleSpeed = 10f;
 
+        // Randomiser för att göra så att bollen studsar en aning okontrollerat
+        private Random random = new Random();
+
         public Window()
         {
             // Initierar fönstret samt begränsar FPS'en till 60 på grund av varierande FPS
@@ -24,30 +29,26 @@ namespace bricks_novemberProjekt
             Ball ball = new Ball();
 
             // Initierar alla tegelstenar
-            // Hittade hur man gör för att initiera genom en loop, men efter tester så kunde jag enbart göra 1 loop, crash på andra loopen
-            // https://stackoverflow.com/questions/29653186/c-sharp-instantiate-multiple-objects
+            // Använder sig av en 2-dimentionell array för alla bricks
+            // y-led och x-led
+            Brick[,] allBricks = new Brick[8, 5];
 
-            Brick[] bricks = new Brick[8];
-            Brick[] bricks2 = new Brick[8];
-            Brick[] bricks3 = new Brick[8];
-            Brick[] bricks4 = new Brick[8];
-            Brick[] bricks5 = new Brick[8];
-
-            for (int i = 0; i < bricks.Length; i++)
+            for (int y = 0; y < allBricks.GetLength(1); y++)
             {
-                bricks[i] = new Brick((120*i)+20, 20);
-                bricks2[i] = new Brick((120*i)+20, 70);
-                bricks3[i] = new Brick((120*i)+20, 120);
-                bricks4[i] = new Brick((120*i)+20, 170);
-                bricks5[i] = new Brick((120*i)+20, 220);
+                for (int x = 0; x < allBricks.GetLength(0); x++)
+                {
+                    allBricks[x, y] = new Brick(20 + x * 120, 20 + y * 50);
+                }
             }
 
             // Så länge fönstret är öppet så kommer programmet att loopas varje ny bild/frame
             while (!Raylib.WindowShouldClose())
             {
+                // Uppdaterar bollen
                 ball.Update();
+
                 // Styrning av paddlen
-                // Ändrar x postion i paddelns klass
+                // Ändrar x postion i paddelns C#-klass
                 if (Raylib.IsKeyDown(paddle.leftKey))
                 {
                     paddle.rectangle.x -= paddleSpeed;
@@ -57,7 +58,7 @@ namespace bricks_novemberProjekt
                 {
                     paddle.rectangle.x += paddleSpeed;
                 }
-                
+
                 // Begränsar så att paddeln inte kan åka utanför bilden
                 // Kanske byter ut så att paddlen istället teleporterar till motsatta sidan
                 if (paddle.rectangle.x <= 10)
@@ -65,11 +66,33 @@ namespace bricks_novemberProjekt
                     paddle.rectangle.x += paddleSpeed;
                 }
 
-                else if (paddle.rectangle.x >= Raylib.GetScreenWidth()-paddle.rectangle.width-10)
+                else if (paddle.rectangle.x >= Raylib.GetScreenWidth() - paddle.rectangle.width - 10)
                 {
                     paddle.rectangle.x -= paddleSpeed;
                 }
 
+                for (int y = 0; y < allBricks.GetLength(1); y++)
+                {
+                    for (int x = 0; x < allBricks.GetLength(0); x++)
+                    {
+                        if (Raylib.CheckCollisionRecs(ball.rectangle, allBricks[x, y].rectangle))
+                        {
+                            if (allBricks[x, y].destroyed == false)
+                            {
+                                ball.yMov = -ball.yMov;
+                            }
+
+                            allBricks[x, y].destroyed = true;
+                        }
+                    }
+                }
+
+                if (Raylib.CheckCollisionRecs(ball.rectangle, paddle.rectangle))
+                {
+                    ball.yMov = -ball.yMov;
+                }
+
+                // Börjar rita ut spelet
                 Raylib.BeginDrawing();
 
                 // Sätter bakgrunden till svart då paddlen, bollen samt varje tegelsten/brick kommer vara vit
@@ -80,15 +103,25 @@ namespace bricks_novemberProjekt
                 ball.Draw();
 
                 // Ritar ut alla bricks/tegelstenar
-                // Eftersom att alla arrayer med bricks/tegelstenar har samma antal funkar det att ha alla i samma loop
-                // Annars skulle jag vara tvungen att ha fler loopar
-                for (int i = 0; i < bricks.Length; i++)
+                // Nest:ad for-loop för att rita ut i både x- och y-led
+                for (int y = 0; y < allBricks.GetLength(1); y++)
                 {
-                    bricks[i].Draw();
-                    bricks2[i].Draw();
-                    bricks3[i].Draw();
-                    bricks4[i].Draw();
-                    bricks5[i].Draw();
+                    for (int x = 0; x < allBricks.GetLength(0); x++)
+                    {
+                        if (allBricks[x, y].destroyed != true)
+                        {
+                            allBricks[x, y].Draw();
+                        }
+                    }
+                }
+
+                // Om bollen har nuddat den nedre kanten av fönstret så är den klassad som död och annan spellogik ska inträffa
+                if (ball.isDead == true)
+                {
+                    // Skriver ut "Game Over" för att signalera att spelet oär över då spelaren har förlorat
+                    // Jag kunde spilttat upp  av texten till en separat Vector2, men eftersom att den (förmodligen) inte kommer användas mer så var det onödigt och bestämde mig för en lång rad kod istället :)
+                    string gameOverText = "Game Over";
+                    Raylib.DrawText(gameOverText, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), gameOverText, 100, default).X / 2, Raylib.GetScreenHeight() / 2 -(int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), gameOverText, 100, default).Y / 2, 100, Color.WHITE);
                 }
 
                 Raylib.EndDrawing();

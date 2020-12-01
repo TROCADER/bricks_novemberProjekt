@@ -6,8 +6,10 @@ namespace bricks_novemberProjekt
     public class Ball
     {
         // Ställer in hastigheten på bollen
-        private float xMov = 5f;
-        private float yMov = 5f;
+        public float xMov = 5f;
+        public float yMov = 5f;
+
+        public bool isDead = false;
 
         //Ändrade om till en Raylib Rectangle då det visade sig vara mer praktiskt
         public Rectangle rectangle = new Rectangle(Raylib.GetScreenWidth()/2-(25/2), Raylib.GetScreenHeight()/2-(25/2), 25, 25);
@@ -34,11 +36,10 @@ namespace bricks_novemberProjekt
             {
                 yMov = -yMov;
             }
-            
-            // Kollision som inte funkar
-            if (Raylib.CheckCollisionRecs(rectangle, paddle.rectangle))
+
+            if (rectangle.y > Raylib.GetScreenHeight()-rectangle.height)
             {
-                xMov = -xMov;
+                isDead = true;
             }
         }
     }

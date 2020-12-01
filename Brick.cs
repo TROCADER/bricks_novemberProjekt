@@ -8,6 +8,8 @@ namespace bricks_novemberProjekt
         public float xPos = 0;
         public float yPos = 0;
 
+        public bool destroyed = false;
+
         public Rectangle rectangle;
 
         public Brick(float xPos, float yPos)
