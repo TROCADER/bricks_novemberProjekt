@@ -42,5 +42,12 @@ namespace bricks_novemberProjekt
                 isDead = true;
             }
         }
+
+        // Används för att återställa position vid restart av spelet
+        public void Reset()
+        {
+            rectangle.x = Raylib.GetScreenWidth()/2-(25/2);
+            rectangle.y = Raylib.GetScreenHeight()/2-(25/2);
+        }
     }
 }

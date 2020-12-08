@@ -25,5 +25,12 @@ namespace bricks_novemberProjekt
         {
             Raylib.DrawRectangleRec(rectangle, Color.WHITE);
         }
+        
+        // Används för att återställa position vid restart av spelet
+        public void Reset()
+        {
+            rectangle.x = Raylib.GetScreenHeight()/2+(150/2);
+            rectangle.y = Raylib.GetScreenHeight()-30;
+        }
     }
 }
