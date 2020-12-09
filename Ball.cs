@@ -6,8 +6,8 @@ namespace bricks_novemberProjekt
     public class Ball
     {
         // Ställer in hastigheten på bollen
-        public float xMov = 5f;
-        public float yMov = 5f;
+        public float xMov = 7f;
+        public float yMov = 7f;
 
         public bool isDead = false;
 

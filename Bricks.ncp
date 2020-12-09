@@ -1,0 +1,25 @@
+<Project>
+  <Name>Bricks</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>Untitled</Name>
+    <Language>CSharp</Language>
+    <Entities>
+      <Entity type="Class">
+        <Name>Game</Name>
+        <Access>Default</Access>
+        <Location left="13" top="18" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public Game()</Member>
+        <Member type="Method">private void Start()</Member>
+        <Member type="Method">private void Restart()</Member>
+        <Member type="Method">private void GameOver()</Member>
+        <Member type="Method">private void Win()</Member>
+        <Member type="Method">private void DrawGame()</Member>
+        <Member type="Method">private void CheckCollisionBrick()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+    </Entities>
+    <Relationships />
+  </ProjectItem>
+</Project>

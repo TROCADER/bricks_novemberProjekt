@@ -12,7 +12,7 @@ namespace bricks_novemberProjekt
 
             // Initierar och kör en konstruktor som är programmet
             // Kontruktorn initerar andra klasser och kör dem
-            Window window = new Window();
+            Game game = new Game();
         }
     }
 }
