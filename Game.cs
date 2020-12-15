@@ -15,6 +15,14 @@ namespace bricks_novemberProjekt
         private bool isRestart = false;
         private bool isStart = true;
 
+        private int bricksBroken = 0;
+
+        // Tre storleksfonter jag använder mig av
+        // Har de definerade utanför metoderna så att jag kan använda de i alla metoder
+        private int fontSize1 = 150;
+        private int fontSize2 = 50;
+        private int fontSize3 = 30;
+
         public Game()
         {
             // Initierar fönstret samt begränsar FPS'en till 60 på grund av varierande FPS
@@ -25,6 +33,10 @@ namespace bricks_novemberProjekt
 
             Paddle paddle = new Paddle(KeyboardKey.KEY_LEFT, KeyboardKey.KEY_RIGHT);
             Ball ball = new Ball();
+
+            Raylib.InitAudioDevice();
+
+            Sound brickSound = Raylib.LoadSound("resources/brick.mp3");
 
             // Initierar alla tegelstenar
             // Använder sig av en 2-dimentionell array för alla bricks
@@ -69,31 +81,9 @@ namespace bricks_novemberProjekt
                     // Uppdaterar bollen
                     ball.Update();
 
-                    // Styrning av paddlen
-                    // Ändrar x postion i paddelns C#-klass
-                    if (Raylib.IsKeyDown(paddle.leftKey))
-                    {
-                        paddle.rectangle.x -= paddleSpeed;
-                    }
+                    PaddleControl(paddle);
 
-                    else if (Raylib.IsKeyDown(paddle.rightKey))
-                    {
-                        paddle.rectangle.x += paddleSpeed;
-                    }
-
-                    // Begränsar så att paddeln inte kan åka utanför bilden
-                    // Kanske byter ut så att paddlen istället teleporterar till motsatta sidan
-                    if (paddle.rectangle.x <= 10)
-                    {
-                        paddle.rectangle.x += paddleSpeed;
-                    }
-
-                    else if (paddle.rectangle.x >= Raylib.GetScreenWidth() - paddle.rectangle.width - 10)
-                    {
-                        paddle.rectangle.x -= paddleSpeed;
-                    }
-
-                    CheckCollisionBrick(allBricks, ball);
+                    CheckCollisionBrick(allBricks, ball, brickSound);
 
                     // Kollision mellan paddel och boll
                     // Även till för att se till att bollen studsar på paddeln
@@ -128,10 +118,10 @@ namespace bricks_novemberProjekt
             Raylib.ClearBackground(Color.BLACK);
 
             string text = "Bricks";
-            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, 150, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, 150, default).Y / 2, 150, Color.WHITE);
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).Y / 2, fontSize1, Color.WHITE);
 
-            string startGameText = "Press SPACE to start";
-            Raylib.DrawText(startGameText, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), startGameText, 50, default).X / 2, (Raylib.GetScreenHeight() / 2) + 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), startGameText, 50, default).Y / 2, 50, Color.WHITE);
+            text = "Press SPACE to start";
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize2, default).X / 2, (Raylib.GetScreenHeight() / 2) + 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize2, default).Y / 2, fontSize2, Color.WHITE);
 
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
             {
@@ -141,9 +131,12 @@ namespace bricks_novemberProjekt
 
         private void Restart(Paddle paddle, Ball ball, Brick[,] allBricks)
         {
+            // Kod som kallar på paddeln och bollens reset metod som återställer deras positioner
             paddle.Reset();
             ball.Reset();
 
+            // Återställer destroyed-boolen i varje brick (x samt y led i arrayen)
+            // --> gör att de kommer ritas ut samt funka i spelet igen
             for (int y = 0; y < allBricks.GetLength(1); y++)
             {
                 for (int x = 0; x < allBricks.GetLength(0); x++)
@@ -152,10 +145,13 @@ namespace bricks_novemberProjekt
                 }
             }
 
+            // Återställer bools som ser till att spelet inte restartar igen samt att bollen återfår sin funktionalitet
             isRestart = false;
             ball.isDead = false;
 
+            // Återställer den statiska räknaren och hur många bricks som spelaren har tagit sönder
             Brick.bricksCounted = 0;
+            bricksBroken = 0;
         }
 
         private void GameOver()
@@ -164,11 +160,18 @@ namespace bricks_novemberProjekt
             Raylib.ClearBackground(Color.BLACK);
 
             string text = "Game Over";
-            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, 150, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, 150, default).Y / 2, 150, Color.WHITE);
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).Y / 2, fontSize1, Color.WHITE);
 
             // Meddelar spelaren om att hen kan starta om spelet
-            string restartText = "Press SPACE to restart";
-            Raylib.DrawText(restartText, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), restartText, 50, default).X / 2, (Raylib.GetScreenHeight() / 2) + 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), restartText, 50, default).Y / 2, 50, Color.WHITE);
+            text = "Press SPACE to restart";
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize2, default).X / 2, (Raylib.GetScreenHeight() / 2) + 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize2, default).Y / 2, fontSize2, Color.WHITE);
+
+            // Meddelar spelaren om att hen kan starta om spelet
+            // Använder mig av 2 strings eftersom att vid kombination med en variabel så mätte den inte korrekt, utan enbart mätte tills variabeln tog plats
+            // --> texten blev inte centrerad
+            text = "You broke a total of: ";
+            string text2 = " bricks!";
+            Raylib.DrawText(text + bricksBroken + text2, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text + bricksBroken + text2, fontSize3, default).X / 2, (Raylib.GetScreenHeight() / 2) - 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text + bricksBroken + text2, fontSize3, default).Y / 2, fontSize3, Color.WHITE);
 
             // Startar om spelet
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
@@ -183,11 +186,15 @@ namespace bricks_novemberProjekt
             Raylib.ClearBackground(Color.BLACK);
 
             string text = "Victory!";
-            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, 150, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, 150, default).Y / 2, 150, Color.WHITE);
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).Y / 2, fontSize1, Color.WHITE);
 
             // Meddelar spelaren om att hen kan starta om spelet
-            string restartText = "Press SPACE to restart";
-            Raylib.DrawText(restartText, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), restartText, 50, default).X / 2, (Raylib.GetScreenHeight() / 2) + 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), restartText, 50, default).Y / 2, 50, Color.WHITE);
+            text = "Press SPACE to restart";
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize2, default).X / 2, (Raylib.GetScreenHeight() / 2) + 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize2, default).Y / 2, fontSize2, Color.WHITE);
+
+            // Meddelar spelaren om att hen kan starta om spelet
+            text = "You have broken a total of: " + bricksBroken + " bricks!";
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize3, default).X / 2, (Raylib.GetScreenHeight() / 2) - 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize3, default).Y / 2, fontSize3, Color.WHITE);
 
             // Startar om spelet
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
@@ -221,7 +228,7 @@ namespace bricks_novemberProjekt
             }
         }
 
-        private void CheckCollisionBrick(Brick[,] allBricks, Ball ball)
+        private void CheckCollisionBrick(Brick[,] allBricks, Ball ball, Sound brickSound)
         {
             // Går igenom den två-dimentionella arrayen av bricks och kollar kollision
             // Ifall kollision sker så markeras den som död
@@ -236,11 +243,41 @@ namespace bricks_novemberProjekt
                         {
                             ball.yMov = -ball.yMov;
                             Brick.bricksCounted++;
+                            bricksBroken++;
+
+                            Raylib.PlaySound(brickSound);
                         }
 
                         allBricks[x, y].destroyed = true;
                     }
                 }
+            }
+        }
+
+        private void PaddleControl(Paddle paddle)
+        {
+            // Styrning av paddlen
+            // Ändrar x postion i paddelns C#-klass
+            if (Raylib.IsKeyDown(paddle.leftKey))
+            {
+                paddle.rectangle.x -= paddleSpeed;
+            }
+
+            else if (Raylib.IsKeyDown(paddle.rightKey))
+            {
+                paddle.rectangle.x += paddleSpeed;
+            }
+
+            // Begränsar så att paddeln inte kan åka utanför bilden
+            // Kanske byter ut så att paddlen istället teleporterar till motsatta sidan
+            if (paddle.rectangle.x <= 10)
+            {
+                paddle.rectangle.x += paddleSpeed;
+            }
+
+            else if (paddle.rectangle.x >= Raylib.GetScreenWidth() - paddle.rectangle.width - 10)
+            {
+                paddle.rectangle.x -= paddleSpeed;
             }
         }
     }
