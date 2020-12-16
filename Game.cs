@@ -5,7 +5,7 @@ namespace bricks_novemberProjekt
 {
     public class Game
     {
-        // Ställer in storleken av fönstret ()
+        // Ställer in storleken av fönstret
         private int xGameSize = 980;
         private int yGameSize = 720;
 
@@ -23,8 +23,23 @@ namespace bricks_novemberProjekt
         private int fontSize2 = 50;
         private int fontSize3 = 30;
 
+        // Temporär bool för att se till att ljudet bara körs 1 gång
+        // Används i ett if-statement
+        private bool audioBool = false;
+
+        private string text = "";
+
         public Game()
         {
+            // Initierar och laddar in all audio för spelet
+            Raylib.InitAudioDevice();
+
+            Sound brickSound = Raylib.LoadSound("resources/brick.mp3");
+            Sound bounceSound = Raylib.LoadSound("resources/bounce.mp3");
+            Sound coinSound = Raylib.LoadSound("resources/coin.mp3");
+            Sound gameOverSound = Raylib.LoadSound("resources/game_over.mp3");
+            Sound winSound = Raylib.LoadSound("resources/victory.mp3");
+
             // Initierar fönstret samt begränsar FPS'en till 60 på grund av varierande FPS
             // --> programmet körs snabbare eller långsammare beroende på datorn kapabilitet
             // --> kan leda till en försämrad spelupplevelse, samt svårare att koda efter
@@ -33,10 +48,6 @@ namespace bricks_novemberProjekt
 
             Paddle paddle = new Paddle(KeyboardKey.KEY_LEFT, KeyboardKey.KEY_RIGHT);
             Ball ball = new Ball();
-
-            Raylib.InitAudioDevice();
-
-            Sound brickSound = Raylib.LoadSound("resources/brick.mp3");
 
             // Initierar alla tegelstenar
             // Använder sig av en 2-dimentionell array för alla bricks
@@ -51,7 +62,6 @@ namespace bricks_novemberProjekt
                 }
             }
 
-
             // Så länge fönstret är öppet så kommer programmet att loopas varje ny bild/frame
             while (!Raylib.WindowShouldClose())
             {
@@ -64,13 +74,13 @@ namespace bricks_novemberProjekt
                 // Visas bara 1 gång (när spelet öppnas)
                 if (isStart == true)
                 {
-                    Start();
+                    Start(coinSound);
                 }
 
                 // Återställer alla positioner samt bool:s till hur de var från början, för att kunna starta om spelet
                 if (isRestart == true)
                 {
-                    Restart(paddle, ball, allBricks);
+                    Restart(paddle, ball, allBricks, coinSound);
                 }
 
                 // Spelet körs sålänge som spelaren fortfanrade är vid liv
@@ -90,34 +100,42 @@ namespace bricks_novemberProjekt
                     if (Raylib.CheckCollisionRecs(ball.rectangle, paddle.rectangle))
                     {
                         ball.yMov = -ball.yMov;
+                        Raylib.PlaySound(bounceSound);
                     }
 
                     DrawGame(paddle, ball, allBricks);
                 }
 
-                // Om bollen har nuddat den nedre kanten av fönstret så är den klassad som död och annan spellogik ska inträffa
+                // Om bollen har nuddat den nedre kanten av fönstret så är den klassad som död och kod relaterad till förlust-scenario kommer köras
                 // Game Over-state
                 else if (ball.isDead == true && isStart == false && Brick.bricksCounted != allBricks.GetLength(1) * allBricks.GetLength(0))
                 {
-                    GameOver();
+                    GameOver(gameOverSound);
                 }
 
-                // Om man har
+                // Om man har tagit sönder alla bricks så kommer spelet att registrera det som en vinst och kod relaterad till vinst-scenario kommer köras
+                // Win-state
                 if (Brick.bricksCounted == allBricks.GetLength(1) * allBricks.GetLength(0) && isStart == false)
                 {
                     ball.isDead = true;
-                    Win();
+                    Win(winSound);
                 }
 
                 Raylib.EndDrawing();
             }
         }
 
-        private void Start()
+        private void Start(Sound coinSound)
         {
+            if (audioBool == false)
+            {
+                Raylib.PlaySound(coinSound);
+                audioBool = true;
+            }
+
             Raylib.ClearBackground(Color.BLACK);
 
-            string text = "Bricks";
+            text = "Bricks";
             Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).Y / 2, fontSize1, Color.WHITE);
 
             text = "Press SPACE to start";
@@ -125,11 +143,12 @@ namespace bricks_novemberProjekt
 
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
             {
+                audioBool = false;
                 isStart = false;
             }
         }
 
-        private void Restart(Paddle paddle, Ball ball, Brick[,] allBricks)
+        private void Restart(Paddle paddle, Ball ball, Brick[,] allBricks, Sound coinSound)
         {
             // Kod som kallar på paddeln och bollens reset metod som återställer deras positioner
             paddle.Reset();
@@ -152,14 +171,22 @@ namespace bricks_novemberProjekt
             // Återställer den statiska räknaren och hur många bricks som spelaren har tagit sönder
             Brick.bricksCounted = 0;
             bricksBroken = 0;
+
+            Raylib.PlaySound(coinSound);
         }
 
-        private void GameOver()
+        private void GameOver(Sound gameOverSound)
         {
+            if (audioBool == false)
+            {
+                Raylib.PlaySound(gameOverSound);
+                audioBool = true;
+            }
+
             // Skriver ut "Game Over" för att signalera att spelet oär över då spelaren har förlorat
             Raylib.ClearBackground(Color.BLACK);
 
-            string text = "Game Over";
+            text = "Game Over";
             Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).Y / 2, fontSize1, Color.WHITE);
 
             // Meddelar spelaren om att hen kan starta om spelet
@@ -169,23 +196,30 @@ namespace bricks_novemberProjekt
             // Meddelar spelaren om att hen kan starta om spelet
             // Använder mig av 2 strings eftersom att vid kombination med en variabel så mätte den inte korrekt, utan enbart mätte tills variabeln tog plats
             // --> texten blev inte centrerad
-            text = "You broke a total of: ";
-            string text2 = " bricks!";
-            Raylib.DrawText(text + bricksBroken + text2, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text + bricksBroken + text2, fontSize3, default).X / 2, (Raylib.GetScreenHeight() / 2) - 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text + bricksBroken + text2, fontSize3, default).Y / 2, fontSize3, Color.WHITE);
+            text = "You broke a total of: " + bricksBroken + " bricks!";
+
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize3, default).X / 2, (Raylib.GetScreenHeight() / 2) - 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize3, default).Y / 2, fontSize3, Color.WHITE);
 
             // Startar om spelet
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
             {
                 isRestart = true;
+                audioBool = false;
             }
         }
 
-        private void Win()
+        private void Win(Sound winSound)
         {
+            if (audioBool == false)
+            {
+                Raylib.PlaySound(winSound);
+                audioBool = true;
+            }
+
             // Skriver ut "Game Over" för att signalera att spelet oär över då spelaren har förlorat
             Raylib.ClearBackground(Color.BLACK);
 
-            string text = "Victory!";
+            text = "Victory!";
             Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).Y / 2, fontSize1, Color.WHITE);
 
             // Meddelar spelaren om att hen kan starta om spelet
@@ -200,13 +234,14 @@ namespace bricks_novemberProjekt
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
             {
                 isRestart = true;
+                audioBool = false;
             }
         }
 
         private void DrawGame(Paddle paddle, Ball ball, Brick[,] allBricks)
         {
             // Sätter bakgrunden till svart då paddlen, bollen samt varje tegelsten/brick kommer vara vit
-            // Svart-vitt spel för nostagli
+            // Svart-vitt spel för arcade-game nostagli
             Raylib.ClearBackground(Color.BLACK);
 
             // Ritar ut alla objekt

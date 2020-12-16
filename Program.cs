@@ -10,7 +10,7 @@ namespace bricks_novemberProjekt
             // Du ville ha lite kod i Main, och nu får du det
             // Varsågod Micke, 1 rad kod :)
 
-            // Initierar och kör en konstruktor som är programmet
+            // Initierar och kör en konstruktor som är programmet/spelet
             // Kontruktorn initerar andra klasser och kör dem
             Game game = new Game();
         }
