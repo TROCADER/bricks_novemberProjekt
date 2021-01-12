@@ -29,6 +29,8 @@ namespace bricks_novemberProjekt
 
         private string text = "";
 
+        private Random random = new Random();
+
         public Game()
         {
             // Initierar och laddar in all audio för spelet
@@ -39,6 +41,15 @@ namespace bricks_novemberProjekt
             Sound coinSound = Raylib.LoadSound("resources/coin.mp3");
             Sound gameOverSound = Raylib.LoadSound("resources/game_over.mp3");
             Sound winSound = Raylib.LoadSound("resources/victory.mp3");
+
+            // Sätter volymen för ljuden eftersom att de var för höga
+            // --> inte få ont i öronen när man spelar
+            // --> kom fram till att 0.5 (antar är 50%) var inte för högt eller lågt
+            Raylib.SetSoundVolume(brickSound, (float)0.5f);
+            Raylib.SetSoundVolume(bounceSound, (float)0.5f);
+            Raylib.SetSoundVolume(coinSound, (float)0.5f);
+            Raylib.SetSoundVolume(gameOverSound, (float)0.5f);
+            Raylib.SetSoundVolume(winSound, (float)0.5f);
 
             // Initierar fönstret samt begränsar FPS'en till 60 på grund av varierande FPS
             // --> programmet körs snabbare eller långsammare beroende på datorn kapabilitet
@@ -99,7 +110,8 @@ namespace bricks_novemberProjekt
                     // Även till för att se till att bollen studsar på paddeln
                     if (Raylib.CheckCollisionRecs(ball.rectangle, paddle.rectangle))
                     {
-                        ball.yMov = -ball.yMov;
+                        RandomBall(ball);
+
                         Raylib.PlaySound(bounceSound);
                     }
 
@@ -313,6 +325,24 @@ namespace bricks_novemberProjekt
             else if (paddle.rectangle.x >= Raylib.GetScreenWidth() - paddle.rectangle.width - 10)
             {
                 paddle.rectangle.x -= paddleSpeed;
+            }
+        }
+
+        private void RandomBall(Ball ball)
+        {
+            // Gör att bollen åker ej i en konstant bana
+            // --> åker slumpartat
+            // --> för ett roligare och svårare spel
+            ball.yMov = -random.Next(4, 11);
+
+            if (ball.xMov < 0)
+            {
+                ball.xMov = -random.Next(4, 11);
+            }
+
+            else if (ball.xMov > 0)
+            {
+                ball.xMov = random.Next(4, 11);
             }
         }
     }

@@ -7,9 +7,26 @@
       <Entity type="Class">
         <Name>Game</Name>
         <Access>Default</Access>
-        <Location left="13" top="18" />
-        <Size width="162" height="216" />
+        <Location left="15" top="19" />
+        <Size width="163" height="519" />
         <Collapsed>False</Collapsed>
+        <Member type="Field">int xGameSize</Member>
+        <Member type="Field">int yGameSize</Member>
+        <Member type="Field">float paddleSpeed</Member>
+        <Member type="Field">bool isRestart</Member>
+        <Member type="Field">bool isStart</Member>
+        <Member type="Field">int bricksBroken</Member>
+        <Member type="Field">int fontSize1</Member>
+        <Member type="Field">int fontSize2</Member>
+        <Member type="Field">int fontSize3</Member>
+        <Member type="Field">bool audioBool</Member>
+        <Member type="Field">string text</Member>
+        <Member type="Field">Sound brickSound</Member>
+        <Member type="Field">Sound bounceSound</Member>
+        <Member type="Field">Sound coinSound</Member>
+        <Member type="Field">Sound gameOverSound</Member>
+        <Member type="Field">Sound winSound</Member>
+        <Member type="Field">Random random</Member>
         <Member type="Constructor">public Game()</Member>
         <Member type="Method">private void Start()</Member>
         <Member type="Method">private void Restart()</Member>
@@ -17,6 +34,52 @@
         <Member type="Method">private void Win()</Member>
         <Member type="Method">private void DrawGame()</Member>
         <Member type="Method">private void CheckCollisionBrick()</Member>
+        <Member type="Method">private void PaddleControl()</Member>
+        <Member type="Method">private void RandomBall()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Brick</Name>
+        <Access>Public</Access>
+        <Location left="189" top="19" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">public static int bricksCounted</Member>
+        <Member type="Field">public float xPos</Member>
+        <Member type="Field">public float yPos</Member>
+        <Member type="Field">public bool destroyed</Member>
+        <Member type="Field">public Rectangle rectangle</Member>
+        <Member type="Constructor">public Brick()</Member>
+        <Member type="Method">public void Draw()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Ball</Name>
+        <Access>Public</Access>
+        <Location left="360" top="20" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">public float xMov</Member>
+        <Member type="Field">public float yMov</Member>
+        <Member type="Field">public bool isDead</Member>
+        <Member type="Field">public Rectangle rectangle</Member>
+        <Member type="Method">public void Draw()</Member>
+        <Member type="Method">public void Update()</Member>
+        <Member type="Method">public void Reset()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Paddle</Name>
+        <Access>Public</Access>
+        <Location left="534" top="20" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">public KeyboardKey leftKey</Member>
+        <Member type="Field">public KeyboardKey rightKey</Member>
+        <Member type="Field">public Rectangle rectangle</Member>
+        <Member type="Constructor">public Paddle()</Member>
+        <Member type="Method">public void Draw()</Member>
+        <Member type="Method">public void Reset()</Member>
         <Modifier>None</Modifier>
       </Entity>
     </Entities>
