@@ -19,9 +19,11 @@ namespace bricks_novemberProjekt
 
         // Tre storleksfonter jag använder mig av
         // Har de definerade utanför metoderna så att jag kan använda de i alla metoder
+        private int fontSize = 0;
         private int fontSize1 = 150;
         private int fontSize2 = 50;
         private int fontSize3 = 30;
+        private int fontSize4 = 20;
 
         // Temporär bool för att se till att ljudet bara körs 1 gång
         // Används i ett if-statement
@@ -45,11 +47,13 @@ namespace bricks_novemberProjekt
             // Sätter volymen för ljuden eftersom att de var för höga
             // --> inte få ont i öronen när man spelar
             // --> kom fram till att 0.5 (antar är 50%) var inte för högt eller lågt
+            // --> förutom för vinst-ljudet som fortfarande för för högt
+            // --> har längre ljudnivå än de övriga ljuden
             Raylib.SetSoundVolume(brickSound, (float)0.5f);
             Raylib.SetSoundVolume(bounceSound, (float)0.5f);
             Raylib.SetSoundVolume(coinSound, (float)0.5f);
             Raylib.SetSoundVolume(gameOverSound, (float)0.5f);
-            Raylib.SetSoundVolume(winSound, (float)0.5f);
+            Raylib.SetSoundVolume(winSound, (float)0.25f);
 
             // Initierar fönstret samt begränsar FPS'en till 60 på grund av varierande FPS
             // --> programmet körs snabbare eller långsammare beroende på datorn kapabilitet
@@ -148,10 +152,20 @@ namespace bricks_novemberProjekt
             Raylib.ClearBackground(Color.BLACK);
 
             text = "Bricks";
-            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).Y / 2, fontSize1, Color.WHITE);
+            fontSize = fontSize1;
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).Y / 2, fontSize, Color.WHITE);
 
             text = "Press SPACE to start";
-            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize2, default).X / 2, (Raylib.GetScreenHeight() / 2) + 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize2, default).Y / 2, fontSize2, Color.WHITE);
+            fontSize = fontSize2;
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).X / 2, (Raylib.GetScreenHeight() / 2) + 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).Y / 2, fontSize, Color.WHITE);
+
+            text = "Move the paddle using left and right arrowkeys";
+            fontSize = fontSize3;
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).X / 2, (Raylib.GetScreenHeight() / 2) + 200 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).Y / 2, fontSize, Color.WHITE);
+
+            text = "Destroy all the Bricks and bounce the ball on the paddle";
+            fontSize = fontSize4;
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).X / 2, (Raylib.GetScreenHeight() / 2) + 300 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).Y / 2, fontSize, Color.WHITE);
 
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
             {
@@ -199,18 +213,20 @@ namespace bricks_novemberProjekt
             Raylib.ClearBackground(Color.BLACK);
 
             text = "Game Over";
-            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).Y / 2, fontSize1, Color.WHITE);
+            fontSize = fontSize1;
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).Y / 2, fontSize, Color.WHITE);
 
             // Meddelar spelaren om att hen kan starta om spelet
             text = "Press SPACE to restart";
-            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize2, default).X / 2, (Raylib.GetScreenHeight() / 2) + 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize2, default).Y / 2, fontSize2, Color.WHITE);
+            fontSize = fontSize2;
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).X / 2, (Raylib.GetScreenHeight() / 2) + 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).Y / 2, fontSize, Color.WHITE);
 
             // Meddelar spelaren om att hen kan starta om spelet
             // Använder mig av 2 strings eftersom att vid kombination med en variabel så mätte den inte korrekt, utan enbart mätte tills variabeln tog plats
             // --> texten blev inte centrerad
             text = "You broke a total of: " + bricksBroken + " bricks!";
-
-            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize3, default).X / 2, (Raylib.GetScreenHeight() / 2) - 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize3, default).Y / 2, fontSize3, Color.WHITE);
+            fontSize = fontSize3;
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).X / 2, (Raylib.GetScreenHeight() / 2) - 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).Y / 2, fontSize, Color.WHITE);
 
             // Startar om spelet
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
@@ -232,15 +248,18 @@ namespace bricks_novemberProjekt
             Raylib.ClearBackground(Color.BLACK);
 
             text = "Victory!";
-            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize1, default).Y / 2, fontSize1, Color.WHITE);
+            fontSize = fontSize1;
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).X / 2, Raylib.GetScreenHeight() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).Y / 2, fontSize, Color.WHITE);
 
             // Meddelar spelaren om att hen kan starta om spelet
             text = "Press SPACE to restart";
-            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize2, default).X / 2, (Raylib.GetScreenHeight() / 2) + 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize2, default).Y / 2, fontSize2, Color.WHITE);
+            fontSize = fontSize2;
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).X / 2, (Raylib.GetScreenHeight() / 2) + 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).Y / 2, fontSize, Color.WHITE);
 
             // Meddelar spelaren om att hen kan starta om spelet
             text = "You have broken a total of: " + bricksBroken + " bricks!";
-            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize3, default).X / 2, (Raylib.GetScreenHeight() / 2) - 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize3, default).Y / 2, fontSize3, Color.WHITE);
+            fontSize = fontSize3;
+            Raylib.DrawText(text, Raylib.GetScreenWidth() / 2 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).X / 2, (Raylib.GetScreenHeight() / 2) - 100 - (int)Raylib.MeasureTextEx(Raylib.GetFontDefault(), text, fontSize, default).Y / 2, fontSize, Color.WHITE);
 
             // Startar om spelet
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
@@ -288,7 +307,7 @@ namespace bricks_novemberProjekt
                     {
                         if (allBricks[x, y].destroyed == false)
                         {
-                            ball.yMov = -ball.yMov;
+                            RandomBall(ball);
                             Brick.bricksCounted++;
                             bricksBroken++;
 
@@ -333,7 +352,7 @@ namespace bricks_novemberProjekt
             // Gör att bollen åker ej i en konstant bana
             // --> åker slumpartat
             // --> för ett roligare och svårare spel
-            ball.yMov = -random.Next(4, 11);
+            ball.yMov = -ball.yMov;
 
             if (ball.xMov < 0)
             {

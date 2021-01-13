@@ -10,7 +10,7 @@ namespace bricks_novemberProjekt
         public KeyboardKey rightKey;
 
         // Initierar en rektangel med mått baserade på skärmens mått
-        public Rectangle rectangle = new Rectangle(Raylib.GetScreenHeight()/2+(150/2), Raylib.GetScreenHeight()-30, 150, 20);
+        public Rectangle rectangle = new Rectangle(Raylib.GetScreenHeight() / 2 + (150 / 2), Raylib.GetScreenHeight() - 30, 150, 20);
 
         // Ställer in paddels position
         // Hämtar in hur stor skärmen är och därefter positionerar enligt den informationen
@@ -25,12 +25,12 @@ namespace bricks_novemberProjekt
         {
             Raylib.DrawRectangleRec(rectangle, Color.WHITE);
         }
-        
+
         // Används för att återställa position vid restart av spelet
         public void Reset()
         {
-            rectangle.x = Raylib.GetScreenHeight()/2+(150/2);
-            rectangle.y = Raylib.GetScreenHeight()-30;
+            rectangle.x = Raylib.GetScreenHeight() / 2 + (150 / 2);
+            rectangle.y = Raylib.GetScreenHeight() - 30;
         }
     }
 }

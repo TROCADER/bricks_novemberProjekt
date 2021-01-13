@@ -12,7 +12,7 @@ namespace bricks_novemberProjekt
         public bool isDead = false;
 
         //Ändrade om till en Raylib Rectangle då det visade sig vara mer praktiskt
-        public Rectangle rectangle = new Rectangle(Raylib.GetScreenWidth()/2-(25/2), Raylib.GetScreenHeight()/2-(25/2), 25, 25);
+        public Rectangle rectangle = new Rectangle(Raylib.GetScreenWidth() / 2 - (25 / 2), Raylib.GetScreenHeight() / 2 - (25 / 2), 25, 25);
 
         // Initierar paddlen för kollision
         Paddle paddle = new Paddle(KeyboardKey.KEY_LEFT, KeyboardKey.KEY_RIGHT);
@@ -27,17 +27,17 @@ namespace bricks_novemberProjekt
             rectangle.x += xMov;
             rectangle.y += yMov;
 
-            if (rectangle.x > Raylib.GetScreenWidth()-rectangle.width || rectangle.x < 0)
+            if (rectangle.x > Raylib.GetScreenWidth() - rectangle.width || rectangle.x < 0)
             {
                 xMov = -xMov;
             }
 
-            if (rectangle.y > Raylib.GetScreenHeight()-rectangle.height || rectangle.y < 0)
+            if (rectangle.y > Raylib.GetScreenHeight() - rectangle.height || rectangle.y < 0)
             {
                 yMov = -yMov;
             }
 
-            if (rectangle.y > Raylib.GetScreenHeight()-rectangle.height)
+            if (rectangle.y > Raylib.GetScreenHeight() - rectangle.height)
             {
                 isDead = true;
             }
@@ -46,8 +46,8 @@ namespace bricks_novemberProjekt
         // Används för att återställa position vid restart av spelet
         public void Reset()
         {
-            rectangle.x = Raylib.GetScreenWidth()/2-(25/2);
-            rectangle.y = Raylib.GetScreenHeight()/2-(25/2);
+            rectangle.x = Raylib.GetScreenWidth() / 2 - (25 / 2);
+            rectangle.y = Raylib.GetScreenHeight() / 2 - (25 / 2);
         }
     }
 }
