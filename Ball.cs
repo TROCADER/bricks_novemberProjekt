@@ -5,6 +5,8 @@ namespace bricks_novemberProjekt
 {
     public class Ball
     {
+        public Sound bounceSound = Raylib.LoadSound("resources/bounce.mp3");
+
         // Ställer in hastigheten på bollen
         public float xMov = 7f;
         public float yMov = 7f;
@@ -14,8 +16,7 @@ namespace bricks_novemberProjekt
         //Ändrade om till en Raylib Rectangle då det visade sig vara mer praktiskt
         public Rectangle rectangle = new Rectangle(Raylib.GetScreenWidth() / 2 - (25 / 2), Raylib.GetScreenHeight() / 2 - (25 / 2), 25, 25);
 
-        // Initierar paddlen för kollision
-        Paddle paddle = new Paddle(KeyboardKey.KEY_LEFT, KeyboardKey.KEY_RIGHT);
+        private Random random = new Random();
 
         public void Draw()
         {
@@ -48,6 +49,24 @@ namespace bricks_novemberProjekt
         {
             rectangle.x = Raylib.GetScreenWidth() / 2 - (25 / 2);
             rectangle.y = Raylib.GetScreenHeight() / 2 - (25 / 2);
+        }
+
+        public void RandomBall()
+        {
+            // Gör att bollen åker ej i en konstant bana
+            // --> åker slumpartat
+            // --> för ett roligare och svårare spel
+            yMov = -yMov;
+
+            if (xMov < 0)
+            {
+                xMov = -random.Next(4, 11);
+            }
+
+            else if (xMov > 0)
+            {
+                xMov = random.Next(4, 11);
+            }
         }
     }
 }

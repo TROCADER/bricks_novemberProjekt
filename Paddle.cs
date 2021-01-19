@@ -32,5 +32,32 @@ namespace bricks_novemberProjekt
             rectangle.x = Raylib.GetScreenHeight() / 2 + (150 / 2);
             rectangle.y = Raylib.GetScreenHeight() - 30;
         }
+
+        public void Update()
+        {
+            // Styrning av paddlen
+            // Ändrar x postion i paddelns C#-klass
+            if (Raylib.IsKeyDown(leftKey))
+            {
+                rectangle.x -= 10f;
+            }
+
+            else if (Raylib.IsKeyDown(rightKey))
+            {
+                rectangle.x += 10f;
+            }
+
+            // Begränsar så att paddeln inte kan åka utanför bilden
+            // Kanske byter ut så att paddlen istället teleporterar till motsatta sidan
+            if (rectangle.x <= 10)
+            {
+                rectangle.x += 10f;
+            }
+
+            else if (rectangle.x >= Raylib.GetScreenWidth() - rectangle.width - 10)
+            {
+                rectangle.x -= 10f;
+            }
+        }
     }
 }

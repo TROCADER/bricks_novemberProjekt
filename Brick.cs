@@ -5,6 +5,8 @@ namespace bricks_novemberProjekt
 {
     public class Brick
     {
+        public Ball ball;
+
         public static int bricksCounted = 0;
 
         public float xPos = 0;
