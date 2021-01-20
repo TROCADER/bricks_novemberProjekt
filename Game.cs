@@ -131,6 +131,7 @@ namespace bricks_novemberProjekt
 
         private void Start(Sound coinSound, TextClass textClass)
         {
+            // Ser till att myntljudet bara körs en gång
             if (audioBool == false)
             {
                 Raylib.PlaySound(coinSound);
@@ -139,6 +140,8 @@ namespace bricks_novemberProjekt
 
             Raylib.ClearBackground(Color.BLACK);
 
+            // Skriver ut starttexten
+            // --> säger till spelaren till hur spelet fungerar samt vad hen ska göra
             textClass.StartText();
 
             if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
